@@ -1,4 +1,8 @@
 class VideoUtils extends HTMLElement {
+    static get observedAttributes() {
+        return ["label-play", "label-pause", "play-pause-button-id"];
+    }
+
     static register(tagName) {
         if ("customElements" in window) {
             customElements.define(tagName || "video-utils", VideoUtils);
@@ -29,21 +33,54 @@ class VideoUtils extends HTMLElement {
             return;
         }
 
-        this.motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
         this.video = this.querySelector('video');
 
+        this.motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
         this.handleReducedMotion();
-
         this.motionQuery.addEventListener('change', this.handleReducedMotion.bind(this));
+
+        let playPauseButtonId = this.getAttribute('play-pause-button-id');
+        this.playPauseButton = playPauseButtonId ? this.querySelector(`#${playPauseButtonId}`) : null;
+        this.labelPlay = this.getAttribute('label-play') || 'Play';
+        this.labelPause = this.getAttribute('label-pause') || 'Pause';
+
+        if (this.playPauseButton) {
+            this.playPauseButton.addEventListener('click', this.handlePausePlay.bind(this));
+        }
+
+
 
         this.initialized = true;
     }
 
     handleReducedMotion() {
         if (this.motionQuery.matches) {
-            this.video.pause();
+            this._pause();
         } else {
-            this.video.play();
+            this._play();
+        }
+    }
+
+    handlePausePlay() {
+        if (this.video.paused) {
+            this._play();
+        } else {
+            this._pause();
+        }
+    }
+
+    _play() {
+        this.video.play();
+
+        if (this.playPauseButton) {
+            this.playPauseButton.innerText = this.labelPause;
+        }
+    }
+    _pause() {
+        this.video.pause();
+
+        if (this.playPauseButton) {
+            this.playPauseButton.innerText = this.labelPlay;
         }
     }
 }
