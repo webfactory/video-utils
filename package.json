@@ -1,0 +1,11 @@
+{
+  "name": "@webfactoryde/video-utils",
+  "version": "0.1.0",
+  "description": "Web Component with progressive enhancements for the HTML <video> element",
+  "main": "src/video-utils.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webfactory/video-utils.git"
+  },
+  "homepage": "https://github.com/webfactory/video-utils#readme"
+}
