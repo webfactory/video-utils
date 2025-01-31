@@ -1,8 +1,4 @@
 class VideoUtils extends HTMLElement {
-    static get observedAttributes() {
-        return ["label-play", "label-pause", "play-pause-button-id"];
-    }
-
     static register(tagName) {
         if ("customElements" in window) {
             customElements.define(tagName || "video-utils", VideoUtils);
@@ -35,20 +31,24 @@ class VideoUtils extends HTMLElement {
 
         this.video = this.querySelector('video');
 
+        // support manual controls if present
+        this.playButton = this.querySelector('[data-video-utils-play]');
+        this.pauseButton = this.querySelector('[data-video-utils-pause]');
+        this.hasControls = this.playButton && this.pauseButton;
+
+        if (this.hasControls) {
+            this.playButton.addEventListener('click', this.handlePausePlay.bind(this));
+            this.pauseButton.addEventListener('click', this.handlePausePlay.bind(this));
+        }
+
+        if (this.video.autoplay) {
+            this.pauseButton.setAttribute('hidden', true);
+        }
+
+        // adhere to users' motion preferences
         this.motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
         this.handleReducedMotion();
         this.motionQuery.addEventListener('change', this.handleReducedMotion.bind(this));
-
-        let playPauseButtonId = this.getAttribute('play-pause-button-id');
-        this.playPauseButton = playPauseButtonId ? this.querySelector(`#${playPauseButtonId}`) : null;
-        this.labelPlay = this.getAttribute('label-play') || 'Play';
-        this.labelPause = this.getAttribute('label-pause') || 'Pause';
-
-        if (this.playPauseButton) {
-            this.playPauseButton.addEventListener('click', this.handlePausePlay.bind(this));
-        }
-
-
 
         this.initialized = true;
     }
@@ -72,15 +72,17 @@ class VideoUtils extends HTMLElement {
     _play() {
         this.video.play();
 
-        if (this.playPauseButton) {
-            this.playPauseButton.innerText = this.labelPause;
+        if (this.hasControls) {
+            this.playButton.setAttribute('hidden', true);
+            this.pauseButton.removeAttribute('hidden');
         }
     }
     _pause() {
         this.video.pause();
 
-        if (this.playPauseButton) {
-            this.playPauseButton.innerText = this.labelPlay;
+        if (this.hasControls) {
+            this.pauseButton.setAttribute('hidden', true);
+            this.playButton.removeAttribute('hidden');
         }
     }
 }
