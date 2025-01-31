@@ -14,7 +14,12 @@ The `<video-utils>` Web Component is meant to be a lightweight wrapper and progr
 
 It supports manual controls (pause and play buttons) so the video can meet [WCAG 2.1 SC 2.2.2: Pause, Stop, Hide](https://www.w3.org/TR/WCAG21/#pause-stop-hide). 
 
-It also implements a media query for `prefers-reduced-motion: reduced`, an OS level user preference option that signals that automatic movement should be limited, and prevents autoplay if the media query (and user preference) matches. 
+It also implements a media query for `prefers-reduced-motion: reduced`, an OS level user preference option that signals that automatic movement should be limited, and prevents autoplay if the media query (and user preference) matches.
+
+Background infos:
+- https://github.com/w3c/wcag/issues/3766
+- https://github.com/w3c/wcag/issues/3478
+- https://www.scottohara.me/note/2019/07/12/reduced-motion-video.html
 
 ### Steps to implement:
 
