@@ -75,6 +75,7 @@ class VideoUtils extends HTMLElement {
         if (this.hasControls) {
             this.playButton.setAttribute('hidden', true);
             this.pauseButton.removeAttribute('hidden');
+            this.pauseButton.focus();
         }
     }
     _pause() {
@@ -83,6 +84,7 @@ class VideoUtils extends HTMLElement {
         if (this.hasControls) {
             this.pauseButton.setAttribute('hidden', true);
             this.playButton.removeAttribute('hidden');
+            this.playButton.focus();
         }
     }
 }
