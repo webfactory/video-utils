@@ -1,4 +1,4 @@
-# <video-utils>
+# &lt;video-utils&gt;
 
 Web Component with progressive enhancements for the HTML &lt;video> element
 
