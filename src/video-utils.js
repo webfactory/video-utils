@@ -37,12 +37,8 @@ class VideoUtils extends HTMLElement {
         this.hasControls = this.playButton && this.pauseButton;
 
         if (this.hasControls) {
-            this.playButton.addEventListener('click', this.handlePausePlay.bind(this));
-            this.pauseButton.addEventListener('click', this.handlePausePlay.bind(this));
-        }
-
-        if (this.video.autoplay) {
-            this.pauseButton.setAttribute('hidden', true);
+            this.playButton.addEventListener('click', this.handlePlay.bind(this));
+            this.pauseButton.addEventListener('click', this.handlePause.bind(this));
         }
 
         // adhere to users' motion preferences
@@ -56,17 +52,19 @@ class VideoUtils extends HTMLElement {
     handleReducedMotion() {
         if (this.motionQuery.matches) {
             this._pause();
-        } else {
+        } else if (this.video.autoplay) {
             this._play();
         }
     }
 
-    handlePausePlay() {
-        if (this.video.paused) {
-            this._play();
-        } else {
-            this._pause();
-        }
+    handlePlay() {
+        this._play();
+        this.pauseButton.focus();
+    }
+
+    handlePause() {
+        this._pause();
+        this.playButton.focus();
     }
 
     _play() {
@@ -75,7 +73,6 @@ class VideoUtils extends HTMLElement {
         if (this.hasControls) {
             this.playButton.setAttribute('hidden', true);
             this.pauseButton.removeAttribute('hidden');
-            this.pauseButton.focus();
         }
     }
     _pause() {
@@ -84,7 +81,6 @@ class VideoUtils extends HTMLElement {
         if (this.hasControls) {
             this.pauseButton.setAttribute('hidden', true);
             this.playButton.removeAttribute('hidden');
-            this.playButton.focus();
         }
     }
 }
