@@ -43,14 +43,15 @@ class VideoUtils extends HTMLElement {
 
         // adhere to users' motion preferences
         this.motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
-        this.handleReducedMotion();
-        this.motionQuery.addEventListener('change', this.handleReducedMotion.bind(this));
+        this.motionQuery.addEventListener('change', this.updatePlayerState.bind(this));
+
+        this.updatePlayerState();
 
         this.initialized = true;
     }
 
-    handleReducedMotion() {
-        if (this.motionQuery.matches) {
+    updatePlayerState() {
+        if (this.motionQuery.matches || !this.video.autoplay) {
             this._pause();
         } else if (this.video.autoplay) {
             this._play();
